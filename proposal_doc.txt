@@ -1,0 +1,22 @@
+family tracker?
+	-sync your google calendar so family members can see your availability
+	-allow user to decide what group(s) of events should be shared with what group(s) they are a part of 
+		-allow toggling specific events in group(s)
+	-allow users to put in details for events
+		-MISC: cost
+		-location
+			-typing in location auto completes (but uses typed location if no match is selected)
+		-web link (especially if virtual event)
+		-date(s)
+		-group(s)
+			-search dropdown (dorpdown with box being typeable search box of groups in dropdown)
+				-first item is "all groups"
+	-bubble you click and radially out from it items come (events, groups, dashboard) as menu
+
+
+/mnt/e/Users/Fox/Documents/projects/python/family_tracker/code
+E:\Users\Fox\Documents\Projects\python\family_tracker\code
+
+docker run -v E:\Users\Fox\Documents\Projects\python\family_tracker\code:/home/app -p 8001:8000 -p 8101:8100 -it family_tracker:init
+
+python3.11

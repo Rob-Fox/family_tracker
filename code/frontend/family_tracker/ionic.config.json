@@ -1,0 +1,7 @@
+{
+  "name": "family_tracker",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

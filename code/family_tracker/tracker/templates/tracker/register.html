@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>REGISTRATION PAGE</h1>
+    <div id="errors">
+        {% if messages %}
+            {% for message in messages %}
+                <h3>{{message}}</h3>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        <form action="/register/" method="post">
+            {% csrf_token %}
+            <label id="name_label">Name:<input type="text" id="name" name="name" value={{ name.0 }}></label><br>
+            <label id="email_label">Email:<input type="text" id="email" name="email" value={{ email.0 }}></label><br>
+            <label id="username_label">Username:<input type="text" id="username" name="username" value={{ username.0 }}></label><br>
+            <label id="password_label">Password:<input type="password" name="password"></label><br>
+            <label id="password_label2">Conmfirm password:<input type="password" name="confirm_password"></label><br>
+            <button type="submit" id="register_button" value="register">Register</button>
+        </form>
+    </div>
+</body>
+</html>

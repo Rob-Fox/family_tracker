@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>LOGIN PAGE</h1>
+    <div id="errors">
+        {% if messages %}
+            {% for message in messages %}
+                <h3>{{message}}</h3>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        <form action="/login_attempt/" method="post">
+            {% csrf_token %}
+            <label id="username_label">Username:<input type="text" id="username"></label><br>
+            <label id="password_label">Password:<input type="password"></label><br>
+            <button type="submit" id="login_button" value="login">Login</button>
+        </form>
+    </div>
+    <div>
+        <form action="/registration_page/" method="post">
+            {% csrf_token %}
+            <button type="submit" id="show_registration_button" value="show_registration">Register</button>
+        </form>
+    </div>
+</body>
+</html>
