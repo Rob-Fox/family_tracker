@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import models as auth_models
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-import re, bcrypt
+import re, bcrypt, uuid
 
 NAME_REGEX = re.compile(r'^[a-zA-Z ]+$')
 
@@ -25,10 +25,7 @@ class Event(models.Model):
     objects = EventManager()
 
     def __repr__(self):
-        return {
-            'name': {},
-            'creator': {}
-        }
+        return "name: {}, creator: {}".format(self.name, self.creator)
 
 class Group(models.Model):
     name = models.CharField(max_length=254)
@@ -36,22 +33,41 @@ class Group(models.Model):
     events = models.ManyToManyField('Event', blank=True)
 
     def __repr__(self):
-        return {
-            'Name': self.name,
-            'Members': self.members,
-            'Events': self.events
-        }
+        return "Name: {}, Members: {}, Events: {}".format(self.name, self.members, self.events)
 
 class Calendar(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user')
 
 
     def __repr__(self):
-        return {
-            'User': self.user
-        }
+        return "User: {}".format(self.user)
 
 class UserManager(models.Manager):
+    def _create_user(self, username, email, password, **xargs):
+        """
+            creates and saves a user with given email, password, and username
+        """
+        if not email:
+            raise ValueError('Must provide an email')
+        if User.objects.filter(email=email):
+            raise ValueError('An account is already associated with that email address.')
+        try:
+            validate_email(email)
+        except:
+            raise ValueError('Must provide a valid email')
+        else:
+            email = self.normalize_email(email)
+        if not username:
+            raise ValueError('Must provide a username')
+        if User.objects.filter(username=username):
+            raise ValueError('That username is already taken, please try another.')
+        user = self.model(email=email, username=username, **xargs)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    def create_user(self, email, password=None, **xargs):
+        return self._create_user(email, password, **xargs)
+
     def registration_validator(self, postData):
         errors = {}
         if len(postData['name']) < 3:
@@ -84,6 +100,7 @@ class UserManager(models.Manager):
         return errors
 
 class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=254, unique=True)
     username = models.CharField(max_length=100, unique=True)
@@ -109,11 +126,7 @@ class User(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
         ]
 
     def __repr__(self):
-        return {
-            'Name': {self.name},
-            'Username': {self.username},
-            'Password': {self.password}
-        }
+        return "Name: {}, Username: {}, Password: {}".format(self.name, self.username, self.password)
 
     # def to_dict(self):
     #     return {

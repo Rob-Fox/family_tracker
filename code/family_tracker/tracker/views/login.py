@@ -2,8 +2,12 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidde
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
-from tracker.models import User
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
 import bcrypt
+
+from tracker.models import User
+from tracker.serializers import *
 
 @require_http_methods(['GET', 'POST'])
 def login_page(request):
@@ -50,3 +54,31 @@ def registration_page(request):
         'username': ''
     }
     return render(request, 'tracker/register.html', context)
+
+
+class UserListCreateView(generics.ListCreateAPIView):
+    """
+        create:
+            add users
+        get:
+            Search or get users
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('email', 'username')
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+        get:
+            get a specific users details
+        delete:
+            remove an existing user
+        patch:
+            update one or more fields for an existing user
+        put:
+            update a user
+    """
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
