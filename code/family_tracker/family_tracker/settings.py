@@ -77,7 +77,7 @@ AUTH_USER_MODEL = 'tracker.User'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'backoffice.customAuthentification.customAuthentification',
+    'tracker.customAuthentification.customAuthentification',
 )
 
 REST_FRAMEWORK = {
